@@ -15,7 +15,7 @@ from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 
-from . import device, hotkeys
+from . import device, hotkeys, lanmouse
 
 APP_NAME = 'Marekov Easy MX Master Switcher'
 RUN_KEY = r'Software\Microsoft\Windows\CurrentVersion\Run'
@@ -74,7 +74,18 @@ class Backend(QObject):
         if self._polling:
             return
         self._polling = True
-        self._worker.submit(lambda: self._statusReady.emit(json.dumps(device.status())))
+        self._worker.submit(lambda: self._statusReady.emit(json.dumps({**device.status(), 'lanMouse': lanmouse.running()})))
+
+    @Slot(bool)
+    def setLanMouse(self, on):
+        def run():
+            try:
+                lanmouse.set_running(on)
+            except OSError as e:
+                self.notify.emit('lan-mouse could not start', str(e))
+        self._worker.submit(run)
+        self._polling = False  # a poll already queued may predate the toggle; queue another
+        self.refresh()
 
     def _set_state(self, raw):
         self._polling = False

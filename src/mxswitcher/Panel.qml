@@ -19,6 +19,7 @@ Window {
   property int awayTo: 0
   property int count: 3
   property var names: ({})
+  property bool lanMouse: false
   readonly property bool switching: backend.switching
   property int cursorIndex: 0
   property bool cursorActive: false
@@ -56,6 +57,7 @@ Window {
     here = parseInt(state.here) || 0
     awayTo = connected ? 0 : (parseInt(state.awayTo) || 0)
     names = state.names && typeof state.names === "object" ? state.names : ({})
+    lanMouse = state.lanMouse === true
   }
 
   function switchTo(channel) {
@@ -65,7 +67,13 @@ Window {
 
   function moveCursor(delta) {
     if (!cursorActive) { cursorActive = true; return }
-    cursorIndex = (cursorIndex + delta + count) % count
+    cursorIndex = (cursorIndex + delta + count + 1) % (count + 1)  // the last row is lan-mouse
+  }
+
+  function activate() {
+    if (!cursorActive) return
+    if (cursorIndex === count) backend.setLanMouse(!lanMouse)
+    else switchTo(cursorIndex + 1)
   }
 
   Component.onCompleted: apply(backend.stateJson)
@@ -120,8 +128,8 @@ Window {
     Keys.onEscapePressed: root.shown = false
     Keys.onUpPressed: root.moveCursor(-1)
     Keys.onDownPressed: root.moveCursor(1)
-    Keys.onReturnPressed: if (root.cursorActive) root.switchTo(root.cursorIndex + 1)
-    Keys.onEnterPressed: if (root.cursorActive) root.switchTo(root.cursorIndex + 1)
+    Keys.onReturnPressed: root.activate()
+    Keys.onEnterPressed: root.activate()
 
     Column {
       id: column
@@ -228,6 +236,89 @@ Window {
               }
               onClicked: root.switchTo(parent.channel)
             }
+          }
+        }
+      }
+
+      Column {
+        width: parent.width
+        spacing: 8
+
+        Text {
+          textFormat: Text.PlainText
+          text: "Lan Mouse"
+          color: theme.foreground
+          opacity: 0.8
+          font.family: root.fontFamily
+          font.pixelSize: 12
+          font.bold: true
+        }
+
+        Rectangle {
+          id: lanRow
+          readonly property bool hasCursor: root.cursorActive && root.cursorIndex === root.count
+          width: parent.width
+          height: 40
+          color: root.lanMouse ? theme.selection : "transparent"
+          border.width: 1
+          border.color: hasCursor ? theme.accent : theme.rowBorder
+          Behavior on border.color { ColorAnimation { duration: 90 } }
+
+          Row {
+            x: 14
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 12
+            Text {
+              anchors.verticalCenter: parent.verticalCenter
+              textFormat: Text.PlainText
+              text: root.lanMouse ? "󰌘" : "󰌙"
+              color: theme.foreground
+              font.family: root.fontFamily
+              font.pixelSize: 17
+            }
+            Text {
+              anchors.verticalCenter: parent.verticalCenter
+              textFormat: Text.PlainText
+              text: root.lanMouse ? "Receiving from Linux" : "Off"
+              color: theme.foreground
+              font.family: root.fontFamily
+              font.pixelSize: 13
+            }
+          }
+
+          // Switch
+          Rectangle {
+            anchors.right: parent.right
+            anchors.rightMargin: 14
+            anchors.verticalCenter: parent.verticalCenter
+            width: 34
+            height: 18
+            radius: 9
+            color: root.lanMouse ? theme.accent : "transparent"
+            border.width: 1
+            border.color: root.lanMouse ? theme.accent : theme.dim
+            Behavior on color { ColorAnimation { duration: 120 } }
+
+            Rectangle {
+              width: 12
+              height: 12
+              radius: 6
+              anchors.verticalCenter: parent.verticalCenter
+              x: root.lanMouse ? parent.width - width - 3 : 3
+              color: root.lanMouse ? theme.background : theme.dim
+              Behavior on x { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
+            }
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onEntered: {
+              root.cursorActive = true
+              root.cursorIndex = root.count
+            }
+            onClicked: backend.setLanMouse(!root.lanMouse)
           }
         }
       }

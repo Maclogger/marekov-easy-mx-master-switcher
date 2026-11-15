@@ -26,6 +26,9 @@ now shared over the network with lan-mouse; see [`LAN-MOUSE.md`](LAN-MOUSE.md) a
   Esc or clicking elsewhere closes it.
 - **Ctrl + Alt + Shift + 1 / 2 / 3** sends the mouse to that channel from anywhere. These are the
   physical number-row keys, so they work on the Slovak layout too.
+- **Lan Mouse** switch in the panel: turns receiving the Linux mouse and keyboard on or off by
+  starting or stopping the lan-mouse daemon (see *Windows lan-mouse setup*). It is off after a
+  reboot until you switch it on; it also shows a daemon started some other way as on.
 - **Right-click** the icon for *Refresh*, *Start with Windows* and *Quit*.
 - Starting the app again while it runs just opens its panel.
 
@@ -82,6 +85,7 @@ is the same app (or the Linux script) on the other computer.
 | `TODO.md` | On hold: implementation spec and checklist for the Windows app |
 | `src/mxswitcher/hidpp.py` | HID++ protocol, ported from `mx-host.py` |
 | `src/mxswitcher/device.py` | State cache, status, switch flow |
+| `src/mxswitcher/lanmouse.py` | Start / stop the lan-mouse daemon |
 | `src/mxswitcher/hotkeys.py` | Global hotkeys (`RegisterHotKey` on its own message-loop thread) |
 | `src/mxswitcher/app.py` | Tray, toasts, polling, autostart, single instance, colour tokens |
 | `src/mxswitcher/Panel.qml` | The panel (port of `reference/linux/Panel.qml`) |
@@ -101,9 +105,9 @@ Done on the Windows laptop following [`LAN-MOUSE.md`](LAN-MOUSE.md), with these 
   `MarekovArchLinux`. Windows only receives; no client back to Linux is configured.
 - **Windows fingerprint**, if the Windows → Linux direction is added later:
   `0f:2e:ab:c2:e3:2c:a6:3f:34:85:64:bc:a4:c1:37:36:1e:04:9a:bf:a7:46:1d:46:ad:7a:0d:4e:c3:7e:ce:e3`
-- **Autostart:** `lan-mouse.lnk` in the user's Startup folder, running
-  `conhost.exe --headless "<install dir>\lan-mouse.exe" daemon`. `lan-mouse.exe` is a console
-  program, and `--headless` keeps the console window from showing.
+- **No autostart:** lan-mouse is switched on and off by hand with the *Lan Mouse* switch in the
+  tray panel, which runs `lan-mouse.exe daemon` with no console window (or stops it). A Startup-folder
+  shortcut from the first setup was removed for that reason.
 - **Firewall:** on first run Windows added its own inbound *Allow* rules for `lan-mouse.exe` on the
   Domain and Public profiles. The Wi-Fi is currently *Public*, so that works. The cleaner setup
   from `LAN-MOUSE.md` (Wi-Fi set to *Private*, UDP 4242 allowed on Private only) needs admin rights
