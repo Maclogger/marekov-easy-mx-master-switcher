@@ -1,5 +1,7 @@
 # TODO — build the Windows app
 
+> ⏸️ **On hold.** Do [`LAN-MOUSE.md`](LAN-MOUSE.md) instead, unless the user explicitly asks for this app.
+
 This file is the brief for the agent implementing the Windows version. Read it fully, then
 `reference/linux/mx-host.py` (protocol) and `reference/linux/Panel.qml` + the screenshots (look).
 Work on the Windows machine itself, so you can run and test against the real mouse.

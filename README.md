@@ -12,7 +12,8 @@ either side.
 
 ## Status
 
-🚧 **Not implemented yet.** The full spec for the implementing agent is in [`TODO.md`](TODO.md).
+⏸️ **On hold.** The mouse is now shared over the network with lan-mouse instead; the Windows setup
+for that is in [`LAN-MOUSE.md`](LAN-MOUSE.md). The tray-app spec stays in [`TODO.md`](TODO.md) for later.
 
 ## How it works (short version)
 
@@ -28,8 +29,11 @@ is the same app (or the Linux script) on the other computer.
 
 | Path | What |
 |---|---|
-| `TODO.md` | Implementation spec and checklist for the Windows app |
+| `AGENTS.md` / `CLAUDE.md` | Start here if you are a coding agent |
+| `LAN-MOUSE.md` | **Current task:** Windows side of the lan-mouse setup |
+| `TODO.md` | On hold: implementation spec and checklist for the Windows app |
 | `reference/linux/mx-host.py` | Working Linux implementation of the HID++ protocol (the source of truth) |
+| `reference/linux/lan-mouse-config.toml`, `lan-mouse.service` | The Linux lan-mouse setup |
 | `reference/linux/Panel.qml` | The Linux bar widget (Quickshell / Qt Quick) whose look the Windows UI copies |
 | `reference/screenshots/` | How the Linux panel looks, connected and away |
 
