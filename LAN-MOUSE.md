@@ -1,5 +1,7 @@
 # Windows side of lan-mouse — do this first
 
+✅ **Done on both sides (2026-11-15).** The Linux client now points at `192.168.1.119`.
+
 **Priority changed:** the user now shares the mouse and keyboard over the network with
 [lan-mouse](https://github.com/feschber/lan-mouse) instead of switching the mouse's Bluetooth channel.
 The Linux side is already set up and running. Your job on this Windows laptop is the receiving side.
