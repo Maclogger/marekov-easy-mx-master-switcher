@@ -1,6 +1,6 @@
 # TODO — build the Windows app
 
-> ⏸️ **On hold.** Do [`LAN-MOUSE.md`](LAN-MOUSE.md) instead, unless the user explicitly asks for this app.
+> ✅ **Implemented** (see the checklist below). Day to day the mouse is shared with lan-mouse instead: [`LAN-MOUSE.md`](LAN-MOUSE.md).
 
 This file is the brief for the agent implementing the Windows version. Read it fully, then
 `reference/linux/mx-host.py` (protocol) and `reference/linux/Panel.qml` + the screenshots (look).
@@ -130,17 +130,18 @@ spacing and tone, not Windows conventions.
 
 ## Deliverables / checklist
 
-- [ ] `src/` app: HID++ module (ported, with the device-discovery part adapted to Windows),
+- [x] `src/` app: HID++ module (ported, with the device-discovery part adapted to Windows),
       state/cache, hotkeys, tray, QML panel
 - [ ] Verified on this machine with the real mouse: reads the channel, reads the names,
-      switches away to the Linux machine (`2`), and the Linux side can send it back (`MEH + 3`)
-- [ ] Hotkeys verified on the Slovak layout
-- [ ] Toasts appear and replace each other instead of stacking (if feasible)
-- [ ] Start-with-Windows toggle works
-- [ ] `build.ps1` (or similar) producing `dist\MarekovEasyMxMasterSwitcher.exe` via PyInstaller
-- [ ] Optional: GitHub Actions workflow (`windows-latest`) building the exe and attaching it to a
+      switches away to the Linux machine (`2`), and the Linux side can send it back (`MEH + 1`;
+      this machine turned out to be channel 1, `NB1MRUC1`). Reading channel and names: verified.
+- [x] Hotkeys verified on the Slovak layout
+- [x] Toasts appear and replace each other instead of stacking (if feasible)
+- [x] Start-with-Windows toggle works
+- [x] `build.ps1` (or similar) producing `dist\MarekovEasyMxMasterSwitcher.exe` via PyInstaller
+- [x] Optional: GitHub Actions workflow (`windows-latest`) building the exe and attaching it to a
       release on tag push
-- [ ] README updated: install/run, build, Logi Options+ notes, known limitations, screenshot of
+- [x] README updated: install/run, build, Logi Options+ notes, known limitations, screenshot of
       the Windows panel; mark this TODO done
 
 ## Out of scope
