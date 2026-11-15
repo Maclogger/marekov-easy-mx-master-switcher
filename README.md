@@ -88,6 +88,27 @@ is the same app (or the Linux script) on the other computer.
 | `reference/linux/` | The Linux side (mx-host, Panel.qml, lan-mouse config and unit), for reference only |
 | `reference/screenshots/` | How the Linux panel looks, connected and away |
 
+## Windows lan-mouse setup
+
+Done on the Windows laptop following [`LAN-MOUSE.md`](LAN-MOUSE.md), with these differences:
+
+- **Hostname is `NB1MRUC1`**, not `MAREKOV-WINDOWS`, so the Linux client must use the IP:
+  **`192.168.1.119`** (Wi-Fi "Marekova WIFI 2"). Its Easy-Switch channel is 1, too.
+- **Install:** lan-mouse **v0.11.0** (`lan-mouse-windows-x86_64.zip`, SHA-256 checked against the
+  release) unpacked to `%LOCALAPPDATA%\Programs\lan-mouse\`.
+- **Config:** `%LOCALAPPDATA%\lan-mouse\config.toml` (this is the one 0.11.0 uses on Windows; the
+  certificate `lan-mouse.pem` is next to it). Port 4242, with the Linux fingerprint authorized as
+  `MarekovArchLinux`. Windows only receives; no client back to Linux is configured.
+- **Windows fingerprint**, if the Windows → Linux direction is added later:
+  `0f:2e:ab:c2:e3:2c:a6:3f:34:85:64:bc:a4:c1:37:36:1e:04:9a:bf:a7:46:1d:46:ad:7a:0d:4e:c3:7e:ce:e3`
+- **Autostart:** `lan-mouse.lnk` in the user's Startup folder, running
+  `conhost.exe --headless "<install dir>\lan-mouse.exe" daemon`. `lan-mouse.exe` is a console
+  program, and `--headless` keeps the console window from showing.
+- **Firewall:** on first run Windows added its own inbound *Allow* rules for `lan-mouse.exe` on the
+  Domain and Public profiles. The Wi-Fi is currently *Public*, so that works. The cleaner setup
+  from `LAN-MOUSE.md` (Wi-Fi set to *Private*, UDP 4242 allowed on Private only) needs admin rights
+  and is left for the user to do.
+
 ## Logi Options+
 
 It works alongside Logi Options+: everything was built and tested with Options+ running.
