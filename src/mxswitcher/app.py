@@ -278,5 +278,5 @@ def main():
     on_state()
     tray.show()
     poll.start()
-    backend.refresh()
+    backend.setLanMouse(True)  # on at login; the panel switch turns it off for this session
     return app.exec()
